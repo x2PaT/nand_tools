@@ -19,6 +19,7 @@ class MainScreen extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
+                calculate();
               },
               child: const Text(
                 'Calculate LFSR',
@@ -29,4 +30,9 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+calculate() {
+  final List<int> a = hexStringToIntList('EF E2 F2 BA');
+  final List<int> b = bytesToBits(a);
 }
