@@ -1,4 +1,21 @@
 class BMAService {
+  /// Berlekamp-Massey Algorithm (BMA) to find the shortest LFSR (Linear Feedback Shift Register)
+  /// that generates the given stream of numbers.
+  ///
+  /// The BMA algorithm takes a list of integers (stream) as input and returns the coefficients
+  /// of the polynomial that represents the shortest LFSR capable of generating that stream.
+  ///
+  /// The function takes a List<int> `stream` as input and returns a List<int> containing the
+  /// coefficients of the polynomial that represents the shortest LFSR.
+  ///
+  /// Example:
+  /// ```dart
+  ///   // Define the input sequence for which to find the LFSR polynomial
+  ///   List<int> inputSequence = [0, 1, 1, 0, 1, 0, 1];
+  ///
+  ///   // Finding the LFSR polynomial coefficients using BMA
+  ///   List<int> coefficients = bma(inputSequence);
+  /// ```
   static List<int> bma(List<int> stream) {
     int n = stream.length;
 
@@ -9,17 +26,15 @@ class BMAService {
     List<int> c = List<int>.filled(n, 0);
     c[0] = 1;
 
-    int L = 0; // length of minimal LFSR
-    int m = -1; // number of iterations since the last update
+    int L = 0;
+    int m = -1;
 
     for (int N = 0; N < n; N++) {
-      // calculate discrepancy
       int d = s[N];
       for (int i = 1; i <= L; i++) {
         d ^= c[i] & s[N - i];
       }
 
-      // if discrepancy is zero; annihilation continues
       if (d == 1) {
         List<int> t = List<int>.from(c);
         for (int i = 0; i < n - N + m; i++) {
