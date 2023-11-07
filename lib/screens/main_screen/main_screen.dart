@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:nand_tools/core/bma/bma_test_seq.dart';
 
-import '../../helpers/binary_helpers.dart';
+import '../../core/bma/bma_service.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({
+class MainScreen extends StatefulWidget {
+  MainScreen({
     super.key,
   });
+
+  final input = BmaTestSequences.testSeq1;
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  List<int> result = [];
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +26,17 @@ class MainScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('LFSR Length: ${result.length - 1}'),
+            Text('LFSR Coefficients: $result'),
+            Text('LFSR taps: ${result.where((e) => e == 1).length - 1}'),
             TextButton(
               onPressed: () {
-                calculate();
+                setState(() {
+                  result = BMAService.bma(widget.input);
+                });
               },
               child: const Text(
-                'Calculate LFSR',
+                'Calculate bma',
               ),
             )
           ],
@@ -30,9 +44,4 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-calculate() {
-  final List<int> a = hexStringToIntList('EF E2 F2 BA');
-  final List<int> b = bytesToBits(a);
 }
